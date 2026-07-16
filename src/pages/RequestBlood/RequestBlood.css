@@ -1,0 +1,150 @@
+.request-page {
+  padding: 2rem 1rem 3rem;
+  background: linear-gradient(135deg, #fffaf6 0%, #f7e8e2 100%);
+}
+
+.request-panel {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  background: rgba(255,255,255,0.96);
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(95, 31, 31, 0.14);
+  border: 1px solid rgba(179, 35, 24, 0.08);
+}
+
+.request-hero {
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.request-hero h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.request-hero p {
+  color: rgba(255,255,255,0.86);
+  line-height: 1.6;
+}
+
+.request-tips {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.request-tips div {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  background: rgba(255,255,255,0.12);
+  padding: 0.75rem 0.9rem;
+  border-radius: 1rem;
+}
+
+.request-card {
+  padding: 2rem;
+}
+
+.request-card h1 {
+  color: var(--primary-dark);
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.request-card p {
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1.1rem;
+}
+
+.request-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.request-card textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.9rem 1rem;
+  resize: vertical;
+  background: #fffdfb;
+}
+
+.request-card form button {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: #fff;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  box-shadow: 0 12px 28px rgba(161, 23, 23, 0.16);
+}
+
+.request-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.8rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.request-message.success-message {
+  background: #eaf8f1;
+  border: 1px solid #bde8d0;
+  color: #166346;
+  animation: request-message-enter 320ms ease-out both;
+}
+
+.request-message.error-message {
+  background: #fff0f3;
+  border: 1px solid #f4c5d0;
+  color: var(--primary-dark);
+}
+
+.request-card form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+@keyframes request-message-enter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .request-message.success-message { animation: none; }
+}
+
+.request-page { background: radial-gradient(circle at 90% 0, #ffdce4 0, transparent 26%), #fff7f8; }
+.request-panel { border-color: var(--border); box-shadow: var(--shadow); }
+.request-hero { background: linear-gradient(145deg, #5e1022, #8d1731); }
+.request-card textarea { background: #fffafb; border-color: var(--border); color: var(--text-primary); }
+.request-card form button { background: var(--primary); box-shadow: 0 12px 24px rgba(200,30,58,.2); }
+
+@media (max-width: 900px) {
+  .request-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .request-card,
+  .request-hero {
+    padding: 1.4rem;
+  }
+}

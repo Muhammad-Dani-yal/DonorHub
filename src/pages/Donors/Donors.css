@@ -1,0 +1,193 @@
+.donors-page {
+  padding: 2rem 5% 3rem;
+  background: linear-gradient(135deg, #fffaf6 0%, #f7e8e2 100%);
+}
+
+.donors-heading {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.donors-heading h1 {
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+}
+
+.donors-heading p {
+  color: var(--text-muted);
+}
+
+.search-section {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.filter-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  background: #fffdfb;
+  min-width: min(100%, 220px);
+}
+
+.filter-box input,
+.filter-box select {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  width: 100%;
+  color: var(--text-primary);
+}
+
+.filter-icon {
+  color: var(--primary);
+}
+
+.donor-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.3rem;
+}
+
+.donor-stats div {
+  background: #fffdfb;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.8rem 1rem;
+  min-width: 140px;
+  text-align: center;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.donor-stats div:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px rgba(110, 16, 38, 0.1);
+}
+
+.donor-stats span {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.donor-stats strong {
+  color: var(--primary-dark);
+  font-size: 1.05rem;
+}
+
+.donor-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.donor-card {
+  background: rgba(255,255,255,0.96);
+  padding: 1.4rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 16px 30px rgba(95, 31, 31, 0.1);
+  text-align: center;
+  border: 1px solid rgba(179, 35, 24, 0.08);
+}
+
+.blood-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: #fff;
+}
+
+.blood-group {
+  display: inline-block;
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  margin: 0.6rem 0;
+  font-weight: 600;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.donor-card:hover .blood-group {
+  transform: scale(1.06);
+  background: #ffe2e8;
+}
+
+.status {
+  display: inline-block;
+  margin-top: 0.7rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: #eefbf3;
+  color: var(--success);
+  font-size: 0.9rem;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.contact-btn,
+.delete-btn {
+  flex: 1;
+  border: 0;
+  padding: 0.75rem 0.8rem;
+  border-radius: 0.9rem;
+  color: #fff;
+}
+
+.contact-btn {
+  background: #3f0f0f;
+}
+
+.delete-btn {
+  background: var(--primary);
+}
+
+.empty-state-card {
+  grid-column: 1 / -1;
+  background: #fffdfb;
+  border: 1px dashed var(--border);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.back-btn-container {
+  margin-bottom: 1rem;
+}
+
+.back-btn {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+}
+
+.donors-page { background: radial-gradient(circle at 90% 0, #ffdce4 0, transparent 26%), #fff7f8; }
+.filter-box, .donor-stats div, .empty-state-card { background: #fff; }
+.donor-card { border-color: var(--border); box-shadow: 0 14px 30px rgba(23,35,57,.08); }
+.donor-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(23,35,57,.13); }
+.donor-card { transition: transform 200ms ease, box-shadow 200ms ease; }
+.donor-card:hover .blood-icon { transform: rotate(-8deg) scale(1.08); }
+.blood-icon { transition: transform 220ms ease; }
+.contact-btn { background: var(--primary-dark); }
+.delete-btn, .donors-page .back-btn { background: var(--primary); }
