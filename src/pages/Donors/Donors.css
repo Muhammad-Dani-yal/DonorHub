@@ -1,6 +1,7 @@
 .donors-page {
-  padding: 2rem 5% 3rem;
-  background: linear-gradient(135deg, #fffaf6 0%, #f7e8e2 100%);
+  min-height: 100vh;
+  padding: 100px 5% 3rem;
+  background: #f6f8fb;
 }
 
 .donors-heading {
@@ -15,6 +16,17 @@
 
 .donors-heading p {
   color: var(--text-muted);
+}
+
+.donors-error-message {
+  max-width: 620px;
+  margin: 0 auto 16px;
+  padding: 10px 13px;
+  border: 1px solid #712132;
+  border-radius: 8px;
+  background: #2b0c12;
+  color: #ff8999;
+  text-align: center;
 }
 
 .search-section {
@@ -87,78 +99,116 @@
 
 .donor-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 310px));
+  align-items: start;
+  justify-content: center;
+  gap: 14px;
 }
 
 .donor-card {
-  background: rgba(255,255,255,0.96);
-  padding: 1.4rem;
-  border-radius: 1.2rem;
-  box-shadow: 0 16px 30px rgba(95, 31, 31, 0.1);
-  text-align: center;
-  border: 1px solid rgba(179, 35, 24, 0.08);
+  position: relative;
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(23, 35, 57, 0.06);
+  text-align: left;
+  border: 1px solid #dfe4ec;
+  border-left: 4px solid var(--primary);
 }
 
-.blood-icon {
+.donor-card .blood-icon {
   display: grid;
   place-items: center;
-  width: 3rem;
-  height: 3rem;
-  margin: 0 auto 1rem;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--primary));
+  width: 32px;
+  height: 32px;
+  margin: 0 0 10px;
+  border-radius: 8px;
+  background: var(--primary);
   color: #fff;
+  font-size: 14px;
 }
 
-.blood-group {
+.donor-card h2 {
+  margin: 0 0 4px;
+  padding-right: 92px;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.donor-card .blood-group {
   display: inline-block;
-  background: var(--primary-soft);
-  color: var(--primary);
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  margin: 0.6rem 0;
-  font-weight: 600;
-  transition: transform 180ms ease, background 180ms ease;
+  margin: 3px 0 5px;
+  padding: 0;
+  background: transparent;
+  color: var(--primary-dark);
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
-.donor-card:hover .blood-group {
-  transform: scale(1.06);
-  background: #ffe2e8;
+.donor-card p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
 }
 
-.status {
-  display: inline-block;
-  margin-top: 0.7rem;
-  padding: 0.4rem 0.7rem;
+.donor-card p svg { color: #697386; flex: 0 0 auto; }
+
+.donor-card .status {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  margin: 0;
+  padding: 5px 8px;
   border-radius: 999px;
   background: #eefbf3;
   color: var(--success);
-  font-size: 0.9rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
-.btn-group {
+.donor-card .btn-group {
   display: flex;
-  gap: 0.7rem;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #edf0f4;
 }
 
-.contact-btn,
-.delete-btn {
-  flex: 1;
+.donor-card .contact-btn,
+.donor-card .availability-btn,
+.donor-card .approve-donor-btn,
+.donor-card .reject-donor-btn,
+.donor-card .fulfill-donor-btn,
+.donor-card .delete-btn {
   border: 0;
-  padding: 0.75rem 0.8rem;
-  border-radius: 0.9rem;
+  padding: 7px 10px;
+  border-radius: 6px;
   color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
-.contact-btn {
-  background: #3f0f0f;
-}
-
-.delete-btn {
-  background: var(--primary);
-}
+.donor-card .contact-btn { background: var(--primary-dark); }
+.donor-card .availability-btn { background: #2563a6; }
+.donor-card .approve-donor-btn { background: #157a5c; }
+.donor-card .reject-donor-btn { background: #d97706; }
+.donor-card .fulfill-donor-btn { background: #2563a6; }
+.donor-card .delete-btn { background: var(--primary); }
+.donor-card .status.pending { background: #fff4df; color: #9a5b00; }
+.donor-card .status.rejected { background: #fff0f0; color: #a11717; }
+.review-note { align-self: center; color: #9a5b00; font-size: .75rem; font-weight: 700; }
+.donor-health-summary { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; padding: 10px; border: 1px solid #dbe7f5; border-radius: 8px; background: #f5f9ff; font-size: .75rem; }
+.donor-health-summary strong { color: #34537a; }
+.donor-health-summary span { color: var(--text-primary); }
+.donor-card .donor-health-summary p { display: block; margin: 0 0 3px; color: var(--text-muted); font-size: .72rem; }
 
 .empty-state-card {
   grid-column: 1 / -1;
@@ -182,12 +232,13 @@
   border-radius: 999px;
 }
 
-.donors-page { background: radial-gradient(circle at 90% 0, #ffdce4 0, transparent 26%), #fff7f8; }
+.donors-page { background: #f6f8fb; }
 .filter-box, .donor-stats div, .empty-state-card { background: #fff; }
-.donor-card { border-color: var(--border); box-shadow: 0 14px 30px rgba(23,35,57,.08); }
-.donor-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(23,35,57,.13); }
-.donor-card { transition: transform 200ms ease, box-shadow 200ms ease; }
-.donor-card:hover .blood-icon { transform: rotate(-8deg) scale(1.08); }
-.blood-icon { transition: transform 220ms ease; }
-.contact-btn { background: var(--primary-dark); }
-.delete-btn, .donors-page .back-btn { background: var(--primary); }
+.donor-card { border-color: #dfe4ec; border-left-color: var(--primary); box-shadow: 0 3px 10px rgba(23,35,57,.06); }
+.donors-page .back-btn { background: var(--primary); }
+
+@media (max-width: 600px) {
+  .donors-page { padding: 92px 16px 32px; }
+  .donor-container { grid-template-columns: 1fr; }
+  .filter-box { width: 100%; }
+}

@@ -182,6 +182,7 @@
 .form-message { display: flex; align-items: center; gap: 0.5rem; margin: 0; padding: 0.75rem 0.9rem; border-radius: 0.8rem; font-size: 0.9rem; line-height: 1.4; }
 .success-message { background: #eaf8f1; border: 1px solid #bde8d0; color: #166346 !important; }
 .error-message { background: #fff0f3; border: 1px solid #f4c5d0; color: var(--primary-dark) !important; }
+.forgot-password-btn { align-self: center; border: 0; background: transparent; color: var(--primary); font-weight: 700; }
 
 @media (max-width: 860px) {
   .auth-panel,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaUser, FaEnvelope, FaLock, FaTint, FaCity, FaPhone } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/useAuth";
 import "./Register.css";
 
 function Register() {
@@ -59,7 +59,7 @@ function Register() {
     <div className="auth-page">
       <div className="auth-panel auth-panel-wide">
         <div className="auth-hero">
-          <span className="auth-pill">Blood Bank</span>
+          <span className="auth-pill">DonorHub</span>
           <h2>Create your account</h2>
           <p>Join a trusted community of donors and helpers making lifesaving support possible.</p>
 

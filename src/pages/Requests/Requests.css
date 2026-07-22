@@ -1,6 +1,7 @@
 .requests-page {
-  padding: 2rem 5% 3rem;
-  background: linear-gradient(135deg, #fff7f2 0%, #fbeaea 100%);
+  min-height: 100vh;
+  padding: 100px 5% 3rem;
+  background: #f6f8fb;
 }
 
 .requests-page h1 {
@@ -17,69 +18,118 @@
 
 .requests-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 310px));
+  align-items: start;
+  justify-content: center;
+  gap: 14px;
 }
 
 .request-box {
-  background: rgba(255,255,255,0.96);
-  border-radius: 1.2rem;
-  padding: 1.4rem;
-  box-shadow: 0 16px 30px rgba(95, 31, 31, 0.1);
-  text-align: center;
-  border: 1px solid rgba(179, 35, 24, 0.08);
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 3px 10px rgba(23, 35, 57, 0.06);
+  text-align: left;
+  border: 1px solid #dfe4ec;
+  border-left: 4px solid var(--primary);
 }
 
-.blood-circle {
+.request-box .blood-circle {
   display: grid;
   place-items: center;
-  width: 3rem;
-  height: 3rem;
-  margin: 0 auto 0.8rem;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #c53f3f, #a11717);
+  width: 32px;
+  height: 32px;
+  margin: 0 0 10px;
+  border-radius: 8px;
+  background: var(--primary);
   color: #fff;
+  font-size: 14px;
 }
+
+.request-box h2 {
+  margin: 0 0 4px;
+  padding-right: 82px;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.request-box p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.request-box p svg { color: #697386; flex: 0 0 auto; }
 
 .request-box .blood-group {
-  margin: 0.6rem 0;
+  display: inline-block;
+  margin: 3px 0 5px;
+  color: var(--primary-dark);
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
-.status {
-  display: inline-block;
-  margin-top: 0.7rem;
-  padding: 0.4rem 0.7rem;
+.request-box .status {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  margin: 0;
+  padding: 5px 8px;
   border-radius: 999px;
-  background: #eefbf3;
-  color: #18844f;
+  background: #fff4df;
+  color: #9a5b00;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .btn-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  justify-content: center;
-  margin-top: 1rem;
+  gap: 6px;
+  justify-content: flex-start;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #edf0f4;
 }
 
 .approve-btn,
 .reject-btn,
+.fulfilled-btn,
 .delete-btn {
   border: 0;
   color: #fff;
-  padding: 0.65rem 0.8rem;
-  border-radius: 0.8rem;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .approve-btn { background: #18844f; }
 .reject-btn { background: #e18b1e; }
+.fulfilled-btn { background: #2563a6; }
 .delete-btn { background: #b42318; }
+.match-btn { border: 0; padding: 7px 10px; border-radius: 6px; background: #6f42c1; color: #fff; font-size: .78rem; font-weight: 700; }
+.match-count { width: 100%; color: var(--text-muted); font-size: .72rem; font-weight: 700; }
+.requests-error { max-width: 620px; margin: 0 auto 16px !important; padding: 10px; border: 1px solid #712132; border-radius: 8px; background: #2b0c12; color: #ff8999 !important; }
 
-.requests-page { background: radial-gradient(circle at 90% 0, #ffdce4 0, transparent 26%), #fff7f8; }
+.requests-page { background: #f6f8fb; }
 .requests-page h1 { color: var(--text-primary); }
 .requests-page > p { color: var(--text-muted); }
-.request-box { border-color: var(--border); box-shadow: 0 14px 30px rgba(23,35,57,.08); }
-.blood-circle { background: var(--primary); }
+.request-box { border-color: #dfe4ec; border-left-color: var(--primary); box-shadow: 0 3px 10px rgba(23,35,57,.06); }
+.request-box .blood-circle { background: var(--primary); }
 .approve-btn { background: #157a5c; }
 .reject-btn { background: #d97706; }
 .delete-btn { background: var(--primary); }
+
+@media (max-width: 600px) {
+  .requests-page { padding: 92px 16px 32px; }
+  .requests-container { grid-template-columns: 1fr; }
+  .request-box { width: 100%; }
+}

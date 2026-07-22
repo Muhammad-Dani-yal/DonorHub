@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaEnvelope, FaLock } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/useAuth";
+import { resetPassword } from "../../services/firebaseService";
 import "./Login.css";
 
 function Login() {
@@ -27,12 +28,30 @@ function Login() {
     setIsSubmitting(true);
 
     try {
-      await login(user.email, user.password);
+      const result = await login(user.email, user.password);
       setMessage("Sign in successful. Taking you to your dashboard...");
-      window.setTimeout(() => navigate("/dashboard"), 900);
+      window.setTimeout(
+        () => navigate(result.user.role === "admin" ? "/admin" : "/dashboard"),
+        900
+      );
     } catch (error) {
       setErrorMessage(error.message || "Unable to sign in. Please check your details and try again.");
       setIsSubmitting(false);
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    setMessage("");
+    setErrorMessage("");
+    if (!user.email) {
+      setErrorMessage("Enter your email address first, then select Forgot password.");
+      return;
+    }
+    try {
+      await resetPassword(user.email);
+      setMessage("Password reset email sent. Check your inbox.");
+    } catch (error) {
+      setErrorMessage(error.message || "Unable to send password reset email.");
     }
   };
 
@@ -40,7 +59,7 @@ function Login() {
     <div className="auth-page">
       <div className="auth-panel">
         <div className="auth-hero">
-          <span className="auth-pill">Blood Bank</span>
+          <span className="auth-pill">DonorHub</span>
           <h2>Welcome back</h2>
           <p>Access your donor dashboard and stay connected to urgent requests in seconds.</p>
 
@@ -58,7 +77,7 @@ function Login() {
 
         <div className="auth-card">
           <h1>Sign in</h1>
-          <p>Continue managing your Blood Bank account.</p>
+          <p>Continue managing your DonorHub account.</p>
 
           <form onSubmit={handleSubmit}>
             {message && <p className="form-message success-message"><FaCheckCircle /> {message}</p>}
@@ -89,6 +108,10 @@ function Login() {
 
             <button type="submit" className="auth-btn" disabled={isSubmitting}>
               {isSubmitting ? "Signing in..." : "Log in"}
+            </button>
+
+            <button type="button" className="forgot-password-btn" onClick={handlePasswordReset}>
+              Forgot password?
             </button>
 
             <p className="auth-link">

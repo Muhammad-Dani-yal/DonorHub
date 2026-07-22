@@ -4,19 +4,44 @@
       ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
       "$uid": {
         ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
-        ".write": "auth != null && auth.uid === $uid && ((!data.exists() && newData.child('role').val() === 'user') || (data.exists() && newData.child('role').val() === data.child('role').val()))"
+        ".write": "auth != null && ((!data.exists() && auth.uid === $uid && newData.child('role').val() === 'user' && newData.child('accountStatus').val() === 'active') || (data.exists() && newData.child('uid').val() === data.child('uid').val() && newData.child('role').val() === data.child('role').val() && ((auth.uid === $uid && newData.child('accountStatus').val() === data.child('accountStatus').val()) || root.child('users').child(auth.uid).child('role').val() === 'admin')))"
       }
     },
     "donors": {
-      ".read": "auth != null",
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('accountStatus').val() !== 'suspended')",
+      ".indexOn": ["blood", "city", "approvalStatus", "userId"],
       "$id": {
-        ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid) || (data.exists() && newData.child('userId').val() === data.child('userId').val() && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')))"
+        ".write": "auth != null && root.child('users').child(auth.uid).child('accountStatus').val() !== 'suspended' && ((!data.exists() && newData.exists() && newData.child('userId').val() === auth.uid && newData.child('approvalStatus').val() === 'Pending') || (data.exists() && !newData.exists() && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')) || (data.exists() && newData.exists() && newData.child('userId').val() === data.child('userId').val() && (root.child('users').child(auth.uid).child('role').val() === 'admin' || (data.child('userId').val() === auth.uid && newData.child('approvalStatus').val() === data.child('approvalStatus').val()))))"
+      }
+    },
+    "donorScreenings": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
+      "$id": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid) || root.child('users').child(auth.uid).child('role').val() === 'admin')"
       }
     },
     "requests": {
-      ".read": "auth != null",
+      ".read": "auth != null && (root.child('users').child(auth.uid).child('accountStatus').val() !== 'suspended')",
+      ".indexOn": ["blood", "city", "status", "userId"],
       "$id": {
-        ".write": "auth != null && ((!data.exists() && newData.child('userId').val() === auth.uid && newData.child('status').val() === 'Pending') || (data.exists() && newData.child('userId').val() === data.child('userId').val() && (root.child('users').child(auth.uid).child('role').val() === 'admin' || (data.child('userId').val() === auth.uid && newData.child('status').val() === data.child('status').val()))))"
+        ".write": "auth != null && root.child('users').child(auth.uid).child('accountStatus').val() !== 'suspended' && ((!data.exists() && newData.exists() && newData.child('userId').val() === auth.uid && newData.child('status').val() === 'Pending') || (data.exists() && !newData.exists() && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')) || (data.exists() && newData.exists() && newData.child('userId').val() === data.child('userId').val() && (root.child('users').child(auth.uid).child('role').val() === 'admin' || (data.child('userId').val() === auth.uid && newData.child('status').val() === data.child('status').val()))))"
+      }
+    },
+    "notifications": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        "$notificationId": {
+          ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || (auth.uid === $uid && data.exists() && newData.child('id').val() === data.child('id').val() && newData.child('type').val() === data.child('type').val() && newData.child('title').val() === data.child('title').val() && newData.child('message').val() === data.child('message').val() && newData.child('relatedId').val() === data.child('relatedId').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('read').val() === true))"
+        }
+      }
+    },
+    "statusHistory": {
+      "$recordType": {
+        "$recordId": {
+          ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || ($recordType === 'donors' && root.child('donors').child($recordId).child('userId').val() === auth.uid) || ($recordType === 'requests' && root.child('requests').child($recordId).child('userId').val() === auth.uid))",
+          ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+        }
       }
     }
   }

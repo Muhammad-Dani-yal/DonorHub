@@ -1,0 +1,39 @@
+.history-page {
+  min-height: 100vh;
+  padding: 110px 7% 60px;
+  background: #f6f8fb;
+}
+
+.history-header { display: flex; align-items: center; justify-content: center; gap: 18px; text-align: left; margin-bottom: 30px; }
+.history-header > svg { font-size: 48px; color: var(--primary); }
+.history-header h1 { color: var(--text-primary); margin-bottom: 6px; }
+.history-header p, .history-card p, .history-empty p { color: var(--text-muted); }
+.history-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+.history-tabs button { border: 1px solid var(--border); background: #fff; color: var(--text-primary); padding: 12px 20px; border-radius: 999px; cursor: pointer; font-weight: 700; }
+.history-tabs button.active { color: #fff; background: var(--primary-dark); border-color: var(--primary-dark); }
+.history-tabs span { display: inline-grid; place-items: center; min-width: 24px; margin-left: 6px; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.22); }
+.history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 310px)); align-items: start; justify-content: center; gap: 14px; }
+.history-card { padding: 16px; background: #fff; border: 1px solid #dfe4ec; border-left: 4px solid var(--primary); border-radius: 10px; box-shadow: 0 3px 10px rgba(23,35,57,.06); }
+.history-card-top { display: flex; justify-content: space-between; align-items: center; }
+.history-card-top .blood-circle { display: grid; place-items: center; width: 32px; height: 32px; margin: 0; border-radius: 8px; background: var(--primary); color: #fff; font-size: 14px; }
+.history-card h2 { color: var(--text-primary); margin: 10px 0 4px; font-size: 1.05rem; line-height: 1.25; }
+.history-card p { display: flex; align-items: center; gap: 7px; margin-top: 7px; font-size: .88rem; }
+.history-card p svg { color: #697386; flex: 0 0 auto; }
+.history-blood { display: inline-block; margin: 3px 0 5px; color: var(--primary-dark); font-size: .88rem; }
+.history-status { padding: 5px 8px; border-radius: 999px; font-weight: 800; font-size: .7rem; text-transform: uppercase; }
+.history-status.fulfilled { color: #157a5c; background: #e8f8f2; }
+.history-status.rejected { color: #a11717; background: #fff0f0; }
+.history-date { padding-top: 10px; border-top: 1px solid #edf0f4; }
+.history-reason { align-items: flex-start !important; padding: 8px; border-radius: 7px; background: var(--primary-soft); color: var(--text-muted); }
+.history-delete { margin-top: 12px; padding: 7px 10px; border: 0; border-radius: 6px; background: var(--primary); color: #fff; cursor: pointer; font-size: .78rem; font-weight: 700; }
+.history-empty, .history-error { text-align: center; padding: 35px; background: #fff; border: 1px solid var(--border); border-radius: 18px; }
+.history-error { color: #a11717; }
+.donor-history-health { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding: 9px; border-radius: 7px; background: #f5f9ff; color: #34537a; font-size: .72rem; }
+
+@media (max-width: 600px) {
+  .history-page { padding: 100px 20px 40px; }
+  .history-header { align-items: flex-start; }
+  .history-header > svg { font-size: 36px; }
+  .history-tabs button { flex: 1; padding: 11px; }
+  .history-grid { grid-template-columns: 1fr; }
+}

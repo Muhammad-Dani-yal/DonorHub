@@ -1,0 +1,326 @@
+:root {
+  color-scheme: dark;
+  --primary: #c5162e;
+  --primary-dark: #7f0b1c;
+  --primary-soft: #2a0c12;
+  --accent: #ef233c;
+  --surface: #141414;
+  --surface-2: #090909;
+  --surface-3: #191919;
+  --border: #3b1b20;
+  --text-primary: #f5f5f5;
+  --text-muted: #aaa3a5;
+  --success: #4fbd87;
+  --shadow: 0 18px 45px rgba(0, 0, 0, .48);
+}
+
+html, body, #root { background: #080808; color: var(--text-primary); }
+body { scrollbar-color: #7f0b1c #101010; }
+::selection { background: #a30f25; color: #fff; }
+.route-loading, .not-found-page { min-height: calc(100vh - 74px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 30px; background: var(--surface-2); color: var(--text-primary); text-align: center; }
+.route-loading { color: var(--primary); font-weight: 800; }
+.not-found-page > span { color: var(--primary); font-size: clamp(4rem, 12vw, 8rem); font-weight: 900; line-height: 1; }
+.not-found-page p { color: var(--text-muted); }
+.not-found-page a { padding: 11px 18px; border-radius: 8px; background: var(--primary); color: #fff; text-decoration: none; font-weight: 700; }
+
+/* Navigation and footer */
+.navbar {
+  background: rgba(8, 8, 8, .94) !important;
+  border-bottom-color: #351118 !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .45) !important;
+}
+.logo { color: #fff !important; }
+.nav-links a { color: #bbb4b6 !important; }
+.nav-links a:hover { color: #ff4860 !important; }
+.login-btn, .notification-trigger, .theme-toggle { background: #171717 !important; border-color: #432028 !important; color: #f5f5f5 !important; }
+.theme-toggle { display: grid; place-items: center; flex: 0 0 42px; width: 42px; height: 42px; padding: 0; border: 1px solid; border-radius: 50%; cursor: pointer; font-size: 1rem; }
+.theme-toggle:hover { color: #ff5269 !important; background: #251014 !important; }
+.register-btn { background: linear-gradient(135deg, #d51b36, #8e0d20) !important; }
+.footer { background: linear-gradient(135deg, #050505, #160307 55%, #430914) !important; border-top: 1px solid #48121c; }
+
+/* All page canvases */
+.landing-page,
+.auth-page,
+.dashboard-page,
+.admin-page,
+.donors-page,
+.requests-page,
+.request-page,
+.donate-page,
+.activity-page,
+.history-page {
+  background: radial-gradient(circle at 88% 0, rgba(132, 8, 29, .27), transparent 26%), #080808 !important;
+}
+
+/* Shared dark surfaces */
+.auth-panel,
+.auth-card,
+.dashboard-shell,
+.admin-card,
+.admin-management,
+.donor-card,
+.request-box,
+.history-card,
+.history-empty,
+.history-error,
+.activity-shell,
+.activity-card,
+.request-panel,
+.request-card,
+.donate-form-section,
+.donate-submit-row,
+.filter-box,
+.donor-stats div,
+.empty-state-card,
+.insight-card,
+.dashboard-card,
+.search-box,
+.notification-panel,
+.notification-item,
+.notification-empty {
+  background: #151515 !important;
+  border-color: #3b1b20 !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .34) !important;
+}
+
+.donor-card, .request-box, .history-card { border-left-color: var(--primary) !important; }
+.dashboard-card:hover, .admin-card:hover, .activity-card:hover { border-color: #7d1829 !important; background: #1a1516 !important; }
+
+/* Typography */
+h1, h2, h3,
+.admin-header h1,
+.admin-card h2,
+.donors-heading h1,
+.requests-page h1,
+.history-header h1,
+.dashboard-card h3,
+.insight-card strong,
+.notification-copy strong { color: #f7f4f5 !important; }
+
+p,
+.admin-header p,
+.admin-card p,
+.donors-heading p,
+.requests-page > p,
+.history-header p,
+.dashboard-card p,
+.activity-card p,
+.notification-copy > span { color: #aaa3a5 !important; }
+
+/* Inputs and controls */
+.input-group,
+.input-box,
+.filter-box,
+.search-box,
+.request-card textarea,
+input,
+select,
+textarea {
+  background: #101010 !important;
+  border-color: #422029 !important;
+  color: #f5f5f5 !important;
+}
+input::placeholder, textarea::placeholder { color: #746d6f !important; }
+select { color-scheme: dark; }
+.input-group:focus-within, .input-box:focus-within, .filter-box:focus-within, .search-box:focus-within {
+  border-color: #d21c38 !important;
+  box-shadow: 0 0 0 3px rgba(210, 28, 56, .18) !important;
+}
+
+/* Dashboards, tables, and toolbars */
+.dashboard-hero, .request-hero {
+  background: linear-gradient(125deg, #1b0509, #580b18 58%, #8e1025) !important;
+}
+.admin-table th { background: #21090e !important; color: #f5f5f5 !important; }
+.admin-table td { border-bottom-color: #352126 !important; color: #c9c3c5; }
+.activity-badge, .toolbar-chip, .status-pill { background: #2a0c12 !important; color: #ff7184 !important; }
+.history-tabs button { background: #151515 !important; border-color: #432028 !important; color: #d4ced0 !important; }
+.history-tabs button.active { background: linear-gradient(135deg, #c5162e, #720919) !important; color: #fff !important; }
+
+/* Notification panel */
+.notification-heading, .notification-item { border-bottom-color: #322126 !important; }
+.notification-item:hover, .notification-item.unread { background: #211014 !important; }
+.notification-count { border-color: #080808 !important; }
+.notification-icon { background: #301018 !important; color: #ff5b71 !important; }
+
+/* Supporting information blocks */
+.health-notice,
+.donor-health-summary,
+.donor-history-health {
+  background: #111a22 !important;
+  border-color: #243b4d !important;
+  color: #a9c5da !important;
+}
+.donor-health-summary span, .donor-history-health span { color: #c8d7e2 !important; }
+.donate-error-message, .error-message, .admin-logout-message { background: #2b0c12 !important; border-color: #712132 !important; color: #ff8999 !important; }
+.success-message { background: #0d271c !important; border-color: #205b42 !important; color: #79d7aa !important; }
+
+/* Landing page content surfaces */
+.compatibility-section { background: #0b0b0b !important; }
+.info-card, .hero-card {
+  background: linear-gradient(145deg, #7f0b1c, #b7142c) !important;
+  border-color: #d83a50 !important;
+  box-shadow: 0 14px 32px rgba(100, 3, 20, .35) !important;
+}
+.info-card h3, .info-card p, .info-card .feature-icon, .hero-card h2, .hero-card p { color: #fff !important; }
+.info-card:hover { background: linear-gradient(145deg, #941027, #cf1c38) !important; border-color: #f16378 !important; }
+
+/* Keep semantic states readable on black */
+.request-box .status.pending, .donor-card .status.pending { background: #352205 !important; color: #ffc45c !important; }
+.donor-card .status.rejected, .history-status.rejected { background: #310b12 !important; color: #ff7f91 !important; }
+.history-status.fulfilled, .donor-card .status.approved { background: #0d2b1e !important; color: #6bd4a0 !important; }
+.request-box .status { background: #352205 !important; color: #ffc45c !important; }
+
+@media (max-width: 768px) {
+  .navbar { background: #080808 !important; }
+}
+
+/* Light mode */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --primary: #bd1831;
+  --primary-dark: #790d20;
+  --primary-soft: #fff0f3;
+  --accent: #e22b48;
+  --surface: #fff;
+  --surface-2: #f7f3f4;
+  --surface-3: #fff;
+  --border: #ead9dd;
+  --text-primary: #261418;
+  --text-muted: #705e62;
+  --shadow: 0 18px 42px rgba(77, 15, 27, .12);
+}
+
+[data-theme="light"],
+[data-theme="light"] body,
+[data-theme="light"] #root { background: #f7f3f4; color: var(--text-primary); }
+[data-theme="light"] body { scrollbar-color: #b21a32 #f1e8ea; }
+[data-theme="light"] .navbar { background: rgba(255, 255, 255, .95) !important; border-bottom-color: #ead9dd !important; box-shadow: 0 8px 24px rgba(77,15,27,.08) !important; }
+[data-theme="light"] .logo { color: #3b151d !important; }
+[data-theme="light"] .nav-links a { color: #68575b !important; }
+[data-theme="light"] .login-btn,
+[data-theme="light"] .notification-trigger,
+[data-theme="light"] .theme-toggle { background: #fff !important; border-color: #e2ccd1 !important; color: #681326 !important; }
+[data-theme="light"] .theme-toggle:hover { background: #fff0f3 !important; color: #bd1831 !important; }
+
+[data-theme="light"] .landing-page,
+[data-theme="light"] .auth-page,
+[data-theme="light"] .dashboard-page,
+[data-theme="light"] .admin-page,
+[data-theme="light"] .donors-page,
+[data-theme="light"] .requests-page,
+[data-theme="light"] .request-page,
+[data-theme="light"] .donate-page,
+[data-theme="light"] .activity-page,
+[data-theme="light"] .history-page { background: radial-gradient(circle at 88% 0, rgba(190,24,49,.1), transparent 27%), #f7f3f4 !important; }
+
+[data-theme="light"] .auth-panel,
+[data-theme="light"] .auth-card,
+[data-theme="light"] .dashboard-shell,
+[data-theme="light"] .admin-card,
+[data-theme="light"] .admin-management,
+[data-theme="light"] .donor-card,
+[data-theme="light"] .request-box,
+[data-theme="light"] .history-card,
+[data-theme="light"] .history-empty,
+[data-theme="light"] .history-error,
+[data-theme="light"] .activity-shell,
+[data-theme="light"] .activity-card,
+[data-theme="light"] .request-panel,
+[data-theme="light"] .request-card,
+[data-theme="light"] .donate-form-section,
+[data-theme="light"] .donate-submit-row,
+[data-theme="light"] .filter-box,
+[data-theme="light"] .donor-stats div,
+[data-theme="light"] .empty-state-card,
+[data-theme="light"] .insight-card,
+[data-theme="light"] .dashboard-card,
+[data-theme="light"] .search-box,
+[data-theme="light"] .notification-panel,
+[data-theme="light"] .notification-item,
+[data-theme="light"] .notification-empty { background: #fff !important; border-color: #ead9dd !important; color: #261418 !important; box-shadow: 0 10px 28px rgba(77,15,27,.09) !important; }
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] .admin-header h1,
+[data-theme="light"] .admin-card h2,
+[data-theme="light"] .donors-heading h1,
+[data-theme="light"] .requests-page h1,
+[data-theme="light"] .history-header h1,
+[data-theme="light"] .dashboard-card h3,
+[data-theme="light"] .insight-card strong,
+[data-theme="light"] .notification-copy strong { color: #261418 !important; }
+
+[data-theme="light"] p,
+[data-theme="light"] .admin-header p,
+[data-theme="light"] .admin-card p,
+[data-theme="light"] .donors-heading p,
+[data-theme="light"] .requests-page > p,
+[data-theme="light"] .history-header p,
+[data-theme="light"] .dashboard-card p,
+[data-theme="light"] .activity-card p,
+[data-theme="light"] .notification-copy > span { color: #705e62 !important; }
+
+[data-theme="light"] .input-group,
+[data-theme="light"] .input-box,
+[data-theme="light"] .filter-box,
+[data-theme="light"] .search-box,
+[data-theme="light"] .request-card textarea,
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea { background: #fff !important; border-color: #dfcbd0 !important; color: #261418 !important; }
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder { color: #9a898d !important; }
+[data-theme="light"] select { color-scheme: light; }
+[data-theme="light"] .admin-table th { background: #fff0f3 !important; color: #4d1722 !important; }
+[data-theme="light"] .admin-table td { border-bottom-color: #eadde0 !important; color: #59484c; }
+[data-theme="light"] .history-tabs button { background: #fff !important; border-color: #dfcbd0 !important; color: #5d454a !important; }
+[data-theme="light"] .notification-item:hover,
+[data-theme="light"] .notification-item.unread { background: #fff3f5 !important; }
+[data-theme="light"] .notification-count { border-color: #fff !important; }
+[data-theme="light"] .hero-copy h1,
+[data-theme="light"] .hero-copy p,
+[data-theme="light"] .hero-card h2,
+[data-theme="light"] .hero-card p,
+[data-theme="light"] .dashboard-hero h1,
+[data-theme="light"] .dashboard-hero p,
+[data-theme="light"] .request-hero h2,
+[data-theme="light"] .request-hero p,
+[data-theme="light"] .auth-hero h2,
+[data-theme="light"] .auth-hero p,
+[data-theme="light"] .footer h2,
+[data-theme="light"] .footer h3,
+[data-theme="light"] .footer p { color: #fff !important; }
+[data-theme="light"] .compatibility-section { background: #fff !important; }
+
+/* Landing blood-red cards remain branded in both modes. */
+[data-theme="light"] .info-card,
+[data-theme="light"] .hero-card { background: linear-gradient(145deg, #861026, #c51b37) !important; border-color: #df5368 !important; }
+[data-theme="light"] .info-card h3,
+[data-theme="light"] .info-card p,
+[data-theme="light"] .info-card .feature-icon,
+[data-theme="light"] .hero-card h2,
+[data-theme="light"] .hero-card p { color: #fff !important; }
+
+@media (max-width: 768px) {
+  [data-theme="light"] .navbar { background: #fff !important; }
+}
+
+/* Light footer uses a clean surface instead of the dark-mode footer. */
+[data-theme="light"] .footer {
+  background: linear-gradient(180deg, #fff, #fff5f7) !important;
+  border-top: 3px solid #bd1831 !important;
+  color: #261418 !important;
+}
+[data-theme="light"] .footer h2 { color: #790d20 !important; }
+[data-theme="light"] .footer h3 { color: #9e142a !important; }
+[data-theme="light"] .footer p,
+[data-theme="light"] .footer .copyright { color: #705e62 !important; }
+[data-theme="light"] .footer a { color: #4c3439 !important; }
+[data-theme="light"] .footer a:hover { color: #bd1831 !important; }
+[data-theme="light"] .footer-logo-icon { color: #bd1831 !important; }
+[data-theme="light"] .footer hr { border-color: #ead9dd !important; }
+[data-theme="light"] .social-icons a { background: #fff0f3 !important; color: #bd1831 !important; }
+[data-theme="light"] .social-icons a:hover { background: #bd1831 !important; color: #fff !important; }

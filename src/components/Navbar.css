@@ -27,6 +27,30 @@
   color: var(--primary);
 }
 
+.logo span {
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.logo span::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.logo:hover span::after,
+.logo:focus-visible span::after {
+  transform: scaleX(1);
+}
+
 .nav-links {
   list-style: none;
   display: flex;
@@ -64,6 +88,9 @@
 }
 
 .nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--primary); }
+.nav-links a.active::after { transform: scaleX(1); }
+.mobile-menu-btn { display: none; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); width: 42px; height: 42px; border-radius: 9px; }
 
 .auth-buttons {
   display: flex;
@@ -79,7 +106,29 @@
   border-radius: 999px;
   text-decoration: none;
   font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
 }
+
+.auth-buttons .login-btn::after,
+.auth-buttons .register-btn::after,
+.auth-buttons .theme-toggle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -135%;
+  width: 60%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent);
+  transform: skewX(-22deg);
+  transition: left 420ms ease;
+  pointer-events: none;
+}
+
+.auth-buttons .login-btn:hover::after,
+.auth-buttons .register-btn:hover::after,
+.auth-buttons .theme-toggle:hover::after { left: 145%; }
 
 .login-btn {
   color: var(--primary-dark);
@@ -94,7 +143,33 @@
 }
 
 .login-btn:hover,
-.register-btn:hover { transform: translateY(-2px); }
+.register-btn:hover { transform: translateY(-3px); }
+
+.auth-buttons .login-btn:hover {
+  box-shadow: 0 10px 22px rgba(42,17,24,.18);
+}
+
+.auth-buttons .register-btn:hover {
+  box-shadow: 0 12px 24px rgba(200,30,58,.28);
+}
+
+.auth-buttons .theme-toggle {
+  position: relative;
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
+}
+
+.auth-buttons .theme-toggle:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(42,17,24,.2);
+}
+
+.logo:focus-visible,
+.auth-buttons a:focus-visible,
+.auth-buttons button:focus-visible {
+  outline: 3px solid rgba(200,30,58,.3);
+  outline-offset: 3px;
+}
 
 @keyframes navbar-enter {
   from { opacity: 0; transform: translateY(-10px); }
@@ -103,18 +178,35 @@
 
 @media (prefers-reduced-motion: reduce) {
   .navbar { animation: none; }
-  .nav-links a::after { transition: none; }
+  .nav-links a::after, .logo span::after { transition: none; }
+  .auth-buttons .login-btn::after, .auth-buttons .register-btn::after, .auth-buttons .theme-toggle::after { display: none; }
 }
 
 @media (max-width: 768px) {
   .navbar {
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: .75rem;
+    padding: .8rem 1rem;
   }
 
   .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 10px 16px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
   }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 11px 8px; }
+  .nav-links a::after { bottom: 3px; }
+  .mobile-menu-btn { display: grid; place-items: center; }
+  .auth-buttons { gap: .4rem; }
+  .auth-buttons .login-btn, .auth-buttons .register-btn { display: none; }
 }

@@ -1,9 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .footer {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
     color: #fff;
@@ -58,6 +52,36 @@
 .footer-box a:hover {
     color: #fde0d8;
     transform: translateX(8px);
+}
+
+/* Keep quick-link interaction limited to the visible label. */
+.footer-box:nth-child(2) a {
+    position: relative;
+    display: table;
+    width: fit-content;
+    padding: 2px 0;
+    transform: none;
+}
+
+.footer-box:nth-child(2) a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: #ffd6df;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.footer-box:nth-child(2) a:hover {
+    transform: translateX(4px);
+}
+
+.footer-box:nth-child(2) a:hover::after {
+    transform: scaleX(1);
 }
 
 .social-icons {
@@ -119,15 +143,13 @@
     .social-icons {
         justify-content: center;
     }
+
+    .footer-box:nth-child(2) a {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
-.footer { background: linear-gradient(125deg, #5e1022, #8d1731); }
-.footer-box h3 { color: #ffd6df; }
-.footer-box p, .copyright { color: #cbd5e1; }
-.footer-box a:hover { color: #ffd6df; }
-.social-icons a:hover { color: var(--accent); }
-
-/* Modern palette */
 .footer { background: linear-gradient(125deg, #5e1022, #8d1731); }
 .footer-box h3 { color: #ffd6df; }
 .footer-box p, .copyright { color: #cbd5e1; }

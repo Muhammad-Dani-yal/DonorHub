@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   authListener,
   getCurrentUser,
@@ -6,10 +6,9 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-  saveUserData,
+  updateUser,
 } from "../services/firebaseService";
-
-const AuthContext = createContext(null);
+import { AuthContext } from "./useAuth";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => getCurrentUser());
@@ -19,13 +18,23 @@ export function AuthProvider({ children }) {
     const unsubscribe = authListener(async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          const profile =
-            (await getUser(firebaseUser.uid)) || {
+          const storedProfile = await getUser(firebaseUser.uid);
+          const profile = storedProfile ? {
+            ...storedProfile,
+            emailVerified: firebaseUser.emailVerified,
+          } : {
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               name: firebaseUser.displayName || firebaseUser.email,
               role: "user",
             };
+
+          if (profile.accountStatus === "suspended") {
+            await logoutUser();
+            setUser(null);
+            setReady(true);
+            return;
+          }
 
           setUser(profile);
         } catch {
@@ -48,13 +57,21 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const result = await loginUser(email, password);
-    const profile =
-      (await getUser(result.user.uid)) || {
+    const storedProfile = await getUser(result.user.uid);
+    const profile = storedProfile ? {
+      ...storedProfile,
+      emailVerified: result.user.emailVerified,
+    } : {
         uid: result.user.uid,
         email: result.user.email,
         name: result.user.displayName || result.user.email,
         role: "user",
       };
+
+    if (profile.accountStatus === "suspended") {
+      await logoutUser();
+      throw new Error("This account has been suspended. Contact an administrator.");
+    }
 
     setUser(profile);
     return { user: profile };
@@ -75,9 +92,9 @@ export function AuthProvider({ children }) {
       city: formData.city,
       phone: formData.phone,
       role: "user",
+      accountStatus: "active",
     };
 
-    await saveUserData(profile.uid, profile);
     setUser(profile);
     return { user: profile };
   };
@@ -87,14 +104,22 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfile = useCallback(async (data) => {
+    if (!user?.uid) throw new Error("You must be signed in to update your profile.");
+    const safeData = {
+      name: data.name,
+      phone: data.phone,
+      city: data.city,
+      blood: data.blood,
+    };
+    await updateUser(user.uid, safeData);
+    setUser((current) => ({ ...current, ...safeData }));
+  }, [user?.uid]);
+
   const value = useMemo(
-    () => ({ user, ready, login, register, signOut }),
-    [user, ready]
+    () => ({ user, ready, login, register, signOut, updateProfile }),
+    [user, ready, updateProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

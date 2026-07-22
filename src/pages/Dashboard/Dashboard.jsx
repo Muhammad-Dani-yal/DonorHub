@@ -1,8 +1,8 @@
 import "./Dashboard.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTint, FaArrowLeft, FaHandHoldingHeart, FaUsers, FaClipboardList, FaSignOutAlt, FaHeartbeat, FaSearch, FaHistory } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext";
+import { FaTint, FaArrowLeft, FaHandHoldingHeart, FaUsers, FaClipboardList, FaSignOutAlt, FaHeartbeat, FaSearch, FaHistory, FaUserCircle } from "react-icons/fa";
+import { useAuth } from "../../context/useAuth";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -30,6 +30,12 @@ function Dashboard() {
 
   const actions = [
     {
+      title: "My profile",
+      route: "/profile",
+      description: "Update your contact and donor details.",
+      icon: FaUserCircle,
+    },
+    {
       title: "Donate blood",
       route: "/donate",
       description: "Share a life-saving gift in a few steps.",
@@ -48,9 +54,9 @@ function Dashboard() {
       icon: FaUsers,
     },
     {
-      title: "See requests",
+      title: "My requests",
       route: "/requests",
-      description: "Track open needs and response status.",
+      description: "Track your requests plus approved community needs.",
       icon: FaClipboardList,
     },
     {
@@ -88,7 +94,7 @@ function Dashboard() {
           <button className="back-btn" onClick={() => navigate(-1)}><FaArrowLeft /> Back</button>
           <div className="dashboard-badge">
             <FaHeartbeat />
-            <span>Blood Bank dashboard</span>
+            <span>DonorHub dashboard</span>
           </div>
         </div>
 
