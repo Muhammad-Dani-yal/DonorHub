@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import App from "./App";
+import { store } from "./app/store";
 import { AuthProvider } from "./context/AuthContext";
 import "./index.css";
 import "./theme.css";
@@ -10,8 +12,10 @@ document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dar
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </Provider>
   </React.StrictMode>
 );

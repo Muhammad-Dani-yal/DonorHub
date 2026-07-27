@@ -15,10 +15,6 @@
   border: 1px solid rgba(179, 35, 24, 0.08);
 }
 
-.auth-card.wide-card {
-  width: min(100%, 700px);
-}
-
 .auth-card h1 {
   color: #4f0f0f;
   text-align: center;

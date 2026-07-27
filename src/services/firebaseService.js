@@ -16,6 +16,16 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { database, auth } from "./firebase";
+import {
+  addJsonDonor,
+  addJsonRequest,
+  deleteJsonDonor,
+  deleteJsonRequest,
+  getJsonDonors,
+  getJsonRequests,
+  updateJsonDonor,
+  updateJsonRequest,
+} from "./jsonService";
 
 const isFirebaseReady = Boolean(auth && database);
 
@@ -26,9 +36,7 @@ const requireFirebase = () => {
 };
 
 export const addDonor = async (donor) => {
-  requireFirebase();
-
-  const id = donor.id || push(ref(database, "donors")).key || `donor_${Date.now()}`;
+  const id = donor.id || (database ? push(ref(database, "donors")).key : null) || `donor_${Date.now()}`;
   const {
     recentDisease,
     recentDiseaseDetails,
@@ -39,14 +47,17 @@ export const addDonor = async (donor) => {
   const entry = {
     ...publicDonor,
     id,
-    userId: auth.currentUser?.uid || null,
+    bloodGroup: publicDonor.blood,
+    isAvailable: publicDonor.availability !== "Unavailable",
+    lastDonated: publicDonor.date || "",
+    userId: auth?.currentUser?.uid || null,
     approvalStatus: "Pending",
     createdAt: Date.now(),
   };
 
   const screening = {
     donorId: id,
-    userId: auth.currentUser?.uid || null,
+    userId: auth?.currentUser?.uid || null,
     recentDisease: recentDisease || "No",
     recentDiseaseDetails: recentDiseaseDetails || "",
     hasAllergies: hasAllergies || "No",
@@ -54,30 +65,53 @@ export const addDonor = async (donor) => {
     createdAt: Date.now(),
   };
 
-  await update(ref(database), {
-    [`donors/${id}`]: entry,
-    [`donorScreenings/${id}`]: screening,
-  });
+  if (!isFirebaseReady) return addJsonDonor(entry);
+  try {
+    await update(ref(database), {
+      [`donors/${id}`]: entry,
+      [`donorScreenings/${id}`]: screening,
+    });
+  } catch {
+    return addJsonDonor(entry);
+  }
   return entry;
 };
 
 export const getDonors = async () => {
-  requireFirebase();
-  const snapshot = await get(ref(database, "donors"));
-  return snapshot.exists() ? snapshot.val() : {};
+  if (!isFirebaseReady) return getJsonDonors();
+  try {
+    const snapshot = await get(ref(database, "donors"));
+    return snapshot.exists() ? snapshot.val() : {};
+  } catch {
+    return getJsonDonors();
+  }
 };
 
 export const updateDonor = async (id, donor) => {
-  requireFirebase();
-  await update(ref(database, `donors/${id}`), donor);
+  const normalized = {
+    ...donor,
+    ...(donor.blood ? { bloodGroup: donor.blood } : {}),
+    ...(donor.availability ? { isAvailable: donor.availability !== "Unavailable" } : {}),
+    ...(donor.date !== undefined ? { lastDonated: donor.date } : {}),
+  };
+  if (!isFirebaseReady) return updateJsonDonor(id, normalized);
+  try {
+    await update(ref(database, `donors/${id}`), normalized);
+  } catch {
+    return updateJsonDonor(id, normalized);
+  }
 };
 
 export const deleteDonor = async (id) => {
-  requireFirebase();
-  await update(ref(database), {
-    [`donors/${id}`]: null,
-    [`donorScreenings/${id}`]: null,
-  });
+  if (!isFirebaseReady) return deleteJsonDonor(id);
+  try {
+    await update(ref(database), {
+      [`donors/${id}`]: null,
+      [`donorScreenings/${id}`]: null,
+    });
+  } catch {
+    return deleteJsonDonor(id);
+  }
 };
 
 export const getDonorScreenings = async () => {
@@ -245,37 +279,59 @@ export const getUser = async (uid) => {
 };
 
 export const addRequest = async (request) => {
-  requireFirebase();
-  const id = request.id || push(ref(database, "requests")).key || `req_${Date.now()}`;
+  const id = request.id || (database ? push(ref(database, "requests")).key : null) || `req_${Date.now()}`;
   const entry = {
     ...request,
     id,
-    userId: auth.currentUser?.uid || null,
+    bloodGroup: request.blood,
+    contact: request.phone,
+    requestedBy: auth?.currentUser?.uid || null,
+    isFulfilled: false,
+    userId: auth?.currentUser?.uid || null,
     status: request.status || "Pending",
     createdAt: Date.now(),
   };
 
-  await set(ref(database, `requests/${id}`), entry);
+  if (!isFirebaseReady) return addJsonRequest(entry);
+  try {
+    await set(ref(database, `requests/${id}`), entry);
+  } catch {
+    return addJsonRequest(entry);
+  }
   return entry;
 };
 
 export const getRequests = async () => {
-  requireFirebase();
-  const snapshot = await get(ref(database, "requests"));
-  return snapshot.exists() ? snapshot.val() : {};
+  if (!isFirebaseReady) return getJsonRequests();
+  try {
+    const snapshot = await get(ref(database, "requests"));
+    return snapshot.exists() ? snapshot.val() : {};
+  } catch {
+    return getJsonRequests();
+  }
 };
 
 export const updateRequest = async (id, data) => {
-  requireFirebase();
-  await update(ref(database, `requests/${id}`), data);
+  const normalized = {
+    ...data,
+    ...(data.status ? { isFulfilled: data.status === "Fulfilled" } : {}),
+  };
+  if (!isFirebaseReady) return updateJsonRequest(id, normalized);
+  try {
+    await update(ref(database, `requests/${id}`), normalized);
+  } catch {
+    return updateJsonRequest(id, normalized);
+  }
 };
 
 export const deleteRequest = async (id) => {
-  requireFirebase();
-  await remove(ref(database, `requests/${id}`));
+  if (!isFirebaseReady) return deleteJsonRequest(id);
+  try {
+    await remove(ref(database, `requests/${id}`));
+  } catch {
+    return deleteJsonRequest(id);
+  }
 };
-
-export const getCurrentUser = () => auth?.currentUser || null;
 
 export const authListener = (callback) => {
   if (!auth) {

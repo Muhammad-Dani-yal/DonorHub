@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaUser, FaEnvelope, FaLock, FaTint, FaCity, FaPhone } from "react-icons/fa";
 import { useAuth } from "../../context/useAuth";
 import "./Register.css";
+import { formatPhone } from "../../utils/inputFormatters";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,7 +23,8 @@ function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const value = e.target.name === "phone" ? formatPhone(e.target.value) : e.target.value;
+    setUser({ ...user, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -94,12 +96,12 @@ function Register() {
 
             <div className="input-box">
               <FaLock className="input-icon" />
-              <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} required />
+              <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} minLength="6" required />
             </div>
 
             <div className="input-box">
               <FaLock className="input-icon" />
-              <input type="password" name="confirmPassword" placeholder="Confirm password" value={user.confirmPassword} onChange={handleChange} required />
+              <input type="password" name="confirmPassword" placeholder="Confirm password" value={user.confirmPassword} onChange={handleChange} minLength="6" required />
             </div>
 
             <div className="input-box">
@@ -124,7 +126,7 @@ function Register() {
 
             <div className="input-box">
               <FaPhone className="input-icon" />
-              <input type="text" name="phone" placeholder="Phone number" value={user.phone} onChange={handleChange} required />
+              <input type="tel" name="phone" placeholder="0300-1234567" value={user.phone} onChange={handleChange} pattern="[0-9]{4}-[0-9]{7}" inputMode="numeric" maxLength="12" required />
             </div>
 
             <button type="submit" className="auth-btn" disabled={isSubmitting}>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import "./Donors.css";
 import {
   FaMapMarkerAlt,
@@ -12,21 +13,26 @@ import {
 import {
   getDonors,
   updateDonor,
+  deleteDonor,
   addNotification,
   addStatusHistory,
   getDonorScreenings,
 } from "../../services/firebaseService";
 import { useAuth } from "../../context/useAuth";
+import { setDonors as setDonorsState } from "../../features/donors/donorsSlice";
+import { formatCnic, formatPhone, isValidCnic, isValidPhone, maskCnic } from "../../utils/inputFormatters";
 
 function Donors() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
 
-  const [donors, setDonors] = useState([]);
+  const donors = useSelector((state) => state.donors.items);
   const [search, setSearch] = useState("");
   const [bloodFilter, setBloodFilter] = useState("");
   const [cityFilter, setCityFilter] = useState("");
+  const [availabilityFilter, setAvailabilityFilter] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchDonors = useCallback(async () => {
@@ -47,11 +53,11 @@ function Donors() {
           screening: screenings[key] || null,
         }));
 
-        setDonors(donorList);
+        dispatch(setDonorsState(donorList));
 
       } else {
 
-        setDonors([]);
+        dispatch(setDonorsState([]));
 
       }
 
@@ -61,25 +67,29 @@ function Donors() {
 
     }
 
-  }, [isAdmin]);
+  }, [dispatch, isAdmin]);
 
   const handleDelete = async (donor) => {
 
     const confirmDelete = window.confirm(
-      "Move this donor to rejected history?"
+      isAdmin ? "Permanently delete this invalid donor entry?" : "Withdraw this donor application?"
     );
 
     if (!confirmDelete) return;
 
     try {
 
-      await updateDonor(donor.id, { approvalStatus: "Rejected" });
+      if (isAdmin) {
+        await deleteDonor(donor.id);
+      } else {
+        await updateDonor(donor.id, { approvalStatus: "Rejected" });
+      }
 
       if (isAdmin && donor.userId && donor.userId !== user?.uid) {
         await addNotification(donor.userId, {
           type: "donor_removed",
           title: "Donor application rejected",
-          message: `Your ${donor.blood} donor listing was moved to rejected records by an administrator.`,
+          message: `Your ${donor.blood} donor listing was removed by an administrator.`,
           relatedId: donor.id,
         });
       }
@@ -102,6 +112,33 @@ function Donors() {
     await updateDonor(donor.id, {
       availability: donor.availability === "Unavailable" ? "Available" : "Unavailable",
     });
+    fetchDonors();
+  };
+
+  const handleEdit = async (donor) => {
+    const name = window.prompt("Full name:", donor.name || "");
+    if (name === null) return;
+    const city = window.prompt("City:", donor.city || "");
+    if (city === null) return;
+    const phoneInput = window.prompt("Contact number (0300-1234567):", donor.phone || "");
+    if (phoneInput === null) return;
+    const phone = formatPhone(phoneInput);
+    if (!isValidPhone(phone)) {
+      setErrorMessage("Phone number must match the format 0300-1234567.");
+      return;
+    }
+    const cnicInput = window.prompt("CNIC (12345-1234567-1):", formatCnic(donor.cnic || ""));
+    if (cnicInput === null) return;
+    const cnic = formatCnic(cnicInput);
+    if (!isValidCnic(cnic)) {
+      setErrorMessage("CNIC must match the format 12345-1234567-1.");
+      return;
+    }
+    const date = window.prompt("Last donation date (YYYY-MM-DD):", donor.date || donor.lastDonated || "");
+    if (date === null) return;
+    const medicalNotes = window.prompt("Medical notes (optional):", donor.medicalNotes || "");
+    if (medicalNotes === null) return;
+    await updateDonor(donor.id, { name: name.trim(), city: city.trim(), phone: phone.trim(), cnic, date, medicalNotes });
     fetchDonors();
   };
 
@@ -139,13 +176,11 @@ function Donors() {
     fetchDonors();
   };
 
-  const activeDonors = donors.filter(
-    (donor) => donor.approvalStatus !== "Rejected" && donor.approvalStatus !== "Fulfilled"
-  );
-
   const accessibleDonors = isAdmin
-    ? activeDonors
-    : activeDonors.filter(
+    ? donors
+    : donors.filter(
+      (donor) => donor.approvalStatus !== "Rejected" && donor.approvalStatus !== "Fulfilled"
+    ).filter(
       (donor) => !donor.approvalStatus || donor.approvalStatus === "Approved" || donor.userId === user?.uid
     );
 
@@ -156,8 +191,9 @@ function Donors() {
 
     const matchBlood = bloodFilter === "" || donor.blood === bloodFilter;
     const matchCity = cityFilter === "" || donor.city?.toLowerCase() === cityFilter.toLowerCase();
+    const matchAvailability = availabilityFilter === "" || donor.availability === availabilityFilter;
 
-    return matchName && matchBlood && matchCity;
+    return matchName && matchBlood && matchCity && matchAvailability;
   });
 
   const cityOptions = Array.from(new Set(accessibleDonors.map((donor) => donor.city).filter(Boolean)));
@@ -190,6 +226,15 @@ function Donors() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+        </div>
+
+        <div className="filter-box">
+          <FaFilter className="filter-icon" />
+          <select value={availabilityFilter} onChange={(e) => setAvailabilityFilter(e.target.value)}>
+            <option value="">All availability</option>
+            <option value="Available">Available</option>
+            <option value="Unavailable">Not available</option>
+          </select>
         </div>
 
         <div className="filter-box">
@@ -266,6 +311,8 @@ function Donors() {
 
               </p>
 
+              {donor.cnic && <p>CNIC: {isAdmin ? formatCnic(donor.cnic) : maskCnic(donor.cnic)}</p>}
+
               <span className={`status ${(donor.approvalStatus || "Approved").toLowerCase()}`}>
                 {donor.approvalStatus && donor.approvalStatus !== "Approved"
                   ? donor.approvalStatus
@@ -310,6 +357,10 @@ function Donors() {
                   <button className="availability-btn" onClick={() => handleAvailability(donor)}>
                     {donor.availability === "Unavailable" ? "Set available" : "Set unavailable"}
                   </button>
+                )}
+
+                {donor.userId === user?.uid && (
+                  <button className="availability-btn" onClick={() => handleEdit(donor)}>Edit</button>
                 )}
 
                 {!isAdmin && donor.userId === user?.uid && donor.approvalStatus === "Pending" && (

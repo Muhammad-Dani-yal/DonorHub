@@ -12,17 +12,25 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { addRequest } from "../../services/firebaseService";
+import { formatCnic, formatPhone } from "../../utils/inputFormatters";
 
 function RequestBlood() {
   const navigate = useNavigate();
   const [request, setRequest] = useState({
-    patientName: "", blood: "", hospital: "", city: "", phone: "", date: "", reason: "", urgency: "Normal",
+    patientName: "", cnic: "", blood: "", hospital: "", city: "", phone: "", date: "", reason: "", urgency: "Normal",
   });
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (event) => setRequest({ ...request, [event.target.name]: event.target.value });
+  const handleChange = (event) => {
+    const value = event.target.name === "cnic"
+      ? formatCnic(event.target.value)
+      : event.target.name === "phone"
+        ? formatPhone(event.target.value)
+        : event.target.value;
+    setRequest({ ...request, [event.target.name]: value });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,12 +72,13 @@ function RequestBlood() {
             {message && <p className="request-message success-message"><FaCheckCircle /> {message}</p>}
             {errorMessage && <p className="request-message error-message">{errorMessage}</p>}
             <div className="input-box"><FaUser className="input-icon" /><input type="text" name="patientName" placeholder="Patient Name" value={request.patientName} onChange={handleChange} required /></div>
-            <div className="input-box"><FaTint className="input-icon" /><select name="blood" value={request.blood} onChange={handleChange} required><option value="">Select Blood Group</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+            <div className="input-box"><FaUser className="input-icon" /><input type="text" name="cnic" placeholder="CNIC: 12345-1234567-1" value={request.cnic} onChange={handleChange} pattern="[0-9]{5}-[0-9]{7}-[0-9]" inputMode="numeric" maxLength="15" required /></div>
+            <div className="input-box blood-select-box"><FaTint className="input-icon" /><select name="blood" value={request.blood} onChange={handleChange} required><option value="">Select Blood Group</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
             <div className="input-box"><FaHospital className="input-icon" /><input type="text" name="hospital" placeholder="Hospital Name" value={request.hospital} onChange={handleChange} required /></div>
             <div className="input-box"><FaMapMarkerAlt className="input-icon" /><input type="text" name="city" placeholder="City" value={request.city} onChange={handleChange} required /></div>
-            <div className="input-box"><FaPhone className="input-icon" /><input type="text" name="phone" placeholder="Phone Number" value={request.phone} onChange={handleChange} required /></div>
+            <div className="input-box"><FaPhone className="input-icon" /><input type="tel" name="phone" placeholder="0300-1234567" value={request.phone} onChange={handleChange} pattern="[0-9]{4}-[0-9]{7}" inputMode="numeric" maxLength="12" required /></div>
             <div className="input-box"><FaCalendarAlt className="input-icon" /><input type="date" name="date" value={request.date} onChange={handleChange} required /></div>
-            <div className="input-box"><FaInfoCircle className="input-icon" /><select name="urgency" value={request.urgency} onChange={handleChange}><option>Normal</option><option>Urgent</option><option>Critical</option></select></div>
+            <div className="input-box urgency-select-box"><FaInfoCircle className="input-icon" /><select name="urgency" value={request.urgency} onChange={handleChange}><option>Normal</option><option>Urgent</option><option>Critical</option></select></div>
             <textarea name="reason" placeholder="Reason for Blood Request" value={request.reason} onChange={handleChange} required />
             <button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting request..." : "Submit Request"}</button>
           </form>

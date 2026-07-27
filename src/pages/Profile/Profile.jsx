@@ -4,13 +4,14 @@ import { FaArrowLeft, FaCheckCircle, FaEnvelope, FaMapMarkerAlt, FaPhone, FaTint
 import { useAuth } from "../../context/useAuth";
 import { resendVerificationEmail } from "../../services/firebaseService";
 import "./Profile.css";
+import { formatPhone } from "../../utils/inputFormatters";
 
 function Profile() {
   const navigate = useNavigate();
   const { user, updateProfile } = useAuth();
   const [form, setForm] = useState({
     name: user?.name || "",
-    phone: user?.phone || "",
+    phone: formatPhone(user?.phone || ""),
     city: user?.city || "",
     blood: user?.blood || "",
   });
@@ -63,7 +64,7 @@ function Profile() {
         <form className="profile-form" onSubmit={handleSubmit}>
           <label><span>Full name</span><div className="input-group"><FaUser /><input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} required /></div></label>
           <label><span>Email address</span><div className="input-group"><FaEnvelope /><input value={user?.email || ""} disabled /></div></label>
-          <label><span>Phone number</span><div className="input-group"><FaPhone /><input value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></div></label>
+          <label><span>Phone number</span><div className="input-group"><FaPhone /><input type="tel" value={form.phone} onChange={(event) => setForm({ ...form, phone: formatPhone(event.target.value) })} placeholder="0300-1234567" pattern="[0-9]{4}-[0-9]{7}" inputMode="numeric" maxLength="12" /></div></label>
           <label><span>City</span><div className="input-group"><FaMapMarkerAlt /><input value={form.city} onChange={(event) => setForm({ ...form, city: event.target.value })} /></div></label>
           <label><span>Blood group</span><div className="input-group"><FaTint /><select value={form.blood} onChange={(event) => setForm({ ...form, blood: event.target.value })}><option value="">Select blood group</option>{["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((group) => <option key={group}>{group}</option>)}</select></div></label>
           <button className="profile-save-btn" disabled={saving}>{saving ? "Saving..." : "Save profile"}</button>

@@ -41,9 +41,9 @@ function AppRoutes() {
         <Route
           path="/dashboard"
           element={
-            <UserRoute>
+            <ProtectedRoute>
               <Dashboard />
-            </UserRoute>
+            </ProtectedRoute>
           }
         />
 
@@ -59,18 +59,18 @@ function AppRoutes() {
         <Route
           path="/donate"
           element={
-            <UserRoute>
+            <ProtectedRoute>
               <Donate />
-            </UserRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/request"
           element={
-            <UserRoute>
+            <ProtectedRoute>
               <RequestBlood />
-            </UserRoute>
+            </ProtectedRoute>
           }
         />
 

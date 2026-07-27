@@ -1,11 +1,16 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import "./Requests.css";
 import {
   FaTint,
   FaHospital,
   FaMapMarkerAlt,
   FaPhone,
+  FaAddressCard,
+  FaCalendarAlt,
+  FaExclamationTriangle,
+  FaAlignLeft,
 } from "react-icons/fa";
 
 import {
@@ -17,21 +22,20 @@ import {
   getDonors,
 } from "../../services/firebaseService";
 import { useAuth } from "../../context/useAuth";
+import { setRequests as setRequestsState } from "../../features/requests/requestsSlice";
+import { formatCnic } from "../../utils/inputFormatters";
 
 function Requests() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
 
-  const [requests, setRequests] = useState([]);
+  const requests = useSelector((state) => state.requests.items);
   const [donors, setDonors] = useState([]);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    loadRequests();
-  }, []);
-
-  const loadRequests = async () => {
+  const loadRequests = useCallback(async () => {
 
     try {
     const [data, donorData] = await Promise.all([getRequests(), getDonors()]);
@@ -43,11 +47,11 @@ function Requests() {
         ...data[key],
       }));
 
-      setRequests(arr);
+      dispatch(setRequestsState(arr));
 
     } else {
 
-      setRequests([]);
+      dispatch(setRequestsState([]));
 
     }
     setDonors(Object.values(donorData || {}));
@@ -55,7 +59,7 @@ function Requests() {
       setError(loadError.message || "Unable to load requests.");
     }
 
-  };
+  }, [dispatch]);
 
   const notifyRequestOwner = async (item, type, title, message) => {
     if (!item.userId) return;
@@ -66,6 +70,10 @@ function Requests() {
       relatedId: item.id,
     });
   };
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
 
   const handleApprove = async (item) => {
 
@@ -129,22 +137,19 @@ function Requests() {
 
   const handleFulfill = async (item) => {
     await updateRequest(item.id, { status: "Fulfilled" });
-    await addStatusHistory("requests", item.id, "Fulfilled");
-    await notifyRequestOwner(
-      item,
-      "request_fulfilled",
-      "Blood request fulfilled",
-      `Your ${item.blood} blood request for ${item.patientName} has been marked as fulfilled.`
-    );
+    if (isAdmin) {
+      await addStatusHistory("requests", item.id, "Fulfilled");
+      await notifyRequestOwner(
+        item,
+        "request_fulfilled",
+        "Blood request fulfilled",
+        `Your ${item.blood} blood request for ${item.patientName} has been marked as fulfilled.`
+      );
+    }
     loadRequests();
   };
 
-  const activeRequests = requests.filter(
-    (item) => item.status === "Pending" || item.status === "Approved"
-  );
-  const visibleRequests = isAdmin
-    ? activeRequests
-    : activeRequests.filter((item) => item.status === "Approved" || item.userId === user?.uid);
+  const visibleRequests = requests.filter((item) => item.status !== "Rejected");
 
   const compatibleGroups = {
     "A+": ["A+", "A-", "O+", "O-"], "A-": ["A-", "O-"],
@@ -187,14 +192,14 @@ function Requests() {
       <p>{isAdmin ? "Manage pending and approved blood requests." : "View approved requests and track your pending requests."}</p>
       {error && <p className="requests-error">{error}</p>}
 
-      <div className="requests-container">
+      <div className={`requests-container ${isAdmin ? "admin-request-grid" : ""}`}>
 
         {visibleRequests.length > 0 ? (
 
           visibleRequests.map((item) => (
 
             <div
-              className="request-box"
+              className={`request-box ${isAdmin ? "admin-request-card" : ""}`}
               key={item.id}
             >
 
@@ -212,31 +217,25 @@ function Requests() {
 
               </span>
 
-              <p>
+              {isAdmin ? (
+                <div className="admin-request-details">
+                  <p><FaAddressCard /><span><strong>CNIC</strong>{item.cnic ? formatCnic(item.cnic) : "Not provided"}</span></p>
+                  <p><FaHospital /><span><strong>Hospital</strong>{item.hospital || "Not provided"}</span></p>
+                  <p><FaMapMarkerAlt /><span><strong>City</strong>{item.city || "Not provided"}</span></p>
+                  <p><FaPhone /><span><strong>Phone</strong>{item.phone || "Not provided"}</span></p>
+                  <p><FaCalendarAlt /><span><strong>Required date</strong>{item.date || "Not provided"}</span></p>
+                  <p><FaExclamationTriangle /><span><strong>Urgency</strong>{item.urgency || "Normal"}</span></p>
+                  <p className="request-reason"><FaAlignLeft /><span><strong>Reason</strong>{item.reason || "Not provided"}</span></p>
+                </div>
+              ) : (
+                <>
+                  <p><FaHospital />{item.hospital}</p>
+                  <p><FaMapMarkerAlt />{item.city}</p>
+                  <p><FaPhone />{item.phone}</p>
+                </>
+              )}
 
-                <FaHospital />
-
-                {item.hospital}
-
-              </p>
-
-              <p>
-
-                <FaMapMarkerAlt />
-
-                {item.city}
-
-              </p>
-
-              <p>
-
-                <FaPhone />
-
-                {item.phone}
-
-              </p>
-
-              <span className="status">
+              <span className={`status ${String(item.status || "Pending").toLowerCase()}`}>
 
                 {item.status}
 
@@ -259,6 +258,11 @@ function Requests() {
               {!isAdmin && item.userId === user?.uid && item.status === "Pending" && (
                 <div className="btn-group">
                   <button className="delete-btn" onClick={() => handleDelete(item)}>Cancel request</button>
+                </div>
+              )}
+              {!isAdmin && item.userId === user?.uid && item.status !== "Fulfilled" && (
+                <div className="btn-group">
+                  <button className="fulfilled-btn" onClick={() => handleFulfill(item)}>Mark fulfilled</button>
                 </div>
               )}
 

@@ -86,7 +86,7 @@ function Landing() {
 
   return (
     <>
-      <main className="landing-page">
+      <main className="landing-page min-h-0">
         <section className="hero-section">
           <div className="hero-copy">
             <span className="section-kicker light"><FaHeartbeat /> Trusted blood coordination</span>

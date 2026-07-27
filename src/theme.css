@@ -157,14 +157,12 @@ select { color-scheme: dark; }
 .success-message { background: #0d271c !important; border-color: #205b42 !important; color: #79d7aa !important; }
 
 /* Landing page content surfaces */
-.compatibility-section { background: #0b0b0b !important; }
-.info-card, .hero-card {
+.hero-card {
   background: linear-gradient(145deg, #7f0b1c, #b7142c) !important;
   border-color: #d83a50 !important;
   box-shadow: 0 14px 32px rgba(100, 3, 20, .35) !important;
 }
-.info-card h3, .info-card p, .info-card .feature-icon, .hero-card h2, .hero-card p { color: #fff !important; }
-.info-card:hover { background: linear-gradient(145deg, #941027, #cf1c38) !important; border-color: #f16378 !important; }
+.hero-card h2, .hero-card p { color: #fff !important; }
 
 /* Keep semantic states readable on black */
 .request-box .status.pending, .donor-card .status.pending { background: #352205 !important; color: #ffc45c !important; }
@@ -293,14 +291,8 @@ select { color-scheme: dark; }
 [data-theme="light"] .footer h2,
 [data-theme="light"] .footer h3,
 [data-theme="light"] .footer p { color: #fff !important; }
-[data-theme="light"] .compatibility-section { background: #fff !important; }
-
 /* Landing blood-red cards remain branded in both modes. */
-[data-theme="light"] .info-card,
 [data-theme="light"] .hero-card { background: linear-gradient(145deg, #861026, #c51b37) !important; border-color: #df5368 !important; }
-[data-theme="light"] .info-card h3,
-[data-theme="light"] .info-card p,
-[data-theme="light"] .info-card .feature-icon,
 [data-theme="light"] .hero-card h2,
 [data-theme="light"] .hero-card p { color: #fff !important; }
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Donate.css";
 import { addDonor } from "../../services/firebaseService";
 import { useNavigate } from "react-router-dom";
+import { formatCnic, formatPhone } from "../../utils/inputFormatters";
 
 import {
   FaUser,
@@ -28,6 +29,7 @@ function Donate() {
     gender: "",
     city: "",
     phone: "",
+    cnic: "",
     date: "",
     address: "",
     availability: "Available",
@@ -35,12 +37,18 @@ function Donate() {
     recentDiseaseDetails: "",
     hasAllergies: "No",
     allergyDetails: "",
+    medicalNotes: "",
   });
 
   const handleChange = (e) => {
+    const value = e.target.name === "cnic"
+      ? formatCnic(e.target.value)
+      : e.target.name === "phone"
+        ? formatPhone(e.target.value)
+        : e.target.value;
     setDonor({
       ...donor,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
@@ -91,7 +99,8 @@ function Donate() {
             <div className="section-heading"><FaMapMarkerAlt /><div><h2>Contact and availability</h2><p>How the DonorHub team can reach you.</p></div></div>
             <div className="donate-form-grid">
               <label><span>City</span><div className="input-group"><FaCity className="input-icon" /><input type="text" name="city" placeholder="Your city" value={donor.city} onChange={handleChange} required /></div></label>
-              <label><span>Phone number</span><div className="input-group"><FaPhoneAlt className="input-icon" /><input type="tel" name="phone" placeholder="03XXXXXXXXX" value={donor.phone} onChange={handleChange} pattern="03[0-9]{9}" maxLength="11" required /></div></label>
+              <label><span>Phone number</span><div className="input-group"><FaPhoneAlt className="input-icon" /><input type="tel" name="phone" placeholder="0300-1234567" value={donor.phone} onChange={handleChange} pattern="[0-9]{4}-[0-9]{7}" inputMode="numeric" maxLength="12" required /></div></label>
+              <label><span>CNIC</span><div className="input-group"><FaUser className="input-icon" /><input type="text" name="cnic" placeholder="12345-1234567-1" value={donor.cnic} onChange={handleChange} pattern="[0-9]{5}-[0-9]{7}-[0-9]" inputMode="numeric" maxLength="15" required /></div></label>
               <label><span>Available donation date</span><div className="input-group"><FaCalendarAlt className="input-icon" /><input type="date" name="date" value={donor.date} onChange={handleChange} required /></div></label>
               <label className="full-width"><span>Complete address</span><div className="input-group textarea-group"><FaMapMarkerAlt className="input-icon" /><textarea name="address" placeholder="Street, area, and nearby landmark" value={donor.address} onChange={handleChange} rows="3" required /></div></label>
             </div>
@@ -105,6 +114,7 @@ function Donate() {
               <label><span>Do you have any allergies?</span><div className="input-group"><FaAllergies className="input-icon" /><select name="hasAllergies" value={donor.hasAllergies} onChange={handleChange} required><option>No</option><option>Yes</option></select></div></label>
               {donor.recentDisease === "Yes" && <label className="full-width"><span>Disease or illness details</span><div className="input-group textarea-group"><FaNotesMedical className="input-icon" /><textarea name="recentDiseaseDetails" placeholder="Describe the condition, treatment, and recovery date" value={donor.recentDiseaseDetails} onChange={handleChange} rows="3" required /></div></label>}
               {donor.hasAllergies === "Yes" && <label className="full-width"><span>Allergy details</span><div className="input-group textarea-group"><FaAllergies className="input-icon" /><textarea name="allergyDetails" placeholder="List known food, medicine, or environmental allergies" value={donor.allergyDetails} onChange={handleChange} rows="3" required /></div></label>}
+              <label className="full-width"><span>Medical notes (optional)</span><div className="input-group textarea-group"><FaNotesMedical className="input-icon" /><textarea name="medicalNotes" placeholder="Any other relevant medical information" value={donor.medicalNotes} onChange={handleChange} rows="3" /></div></label>
             </div>
           </section>
 
